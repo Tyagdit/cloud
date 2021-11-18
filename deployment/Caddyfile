@@ -1,7 +1,4 @@
 paste.nichir.in {
-    basicauth / {
-        tyagdit {$CADDY_BASICAUTH_PASS}
-    }
     request_body {
         max_size 100MB
     }
