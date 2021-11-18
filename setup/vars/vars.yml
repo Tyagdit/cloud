@@ -1,6 +1,0 @@
----
-# Basic setup vars
-user_to_add: adi
-ssh_key_path: /home/adi/.ssh/id_ed25519.pub
-
-run_as_user: adi
