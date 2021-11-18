@@ -1,0 +1,13 @@
+---
+- name: Add new non-root user and add it to sudo group
+  ansible.builtin.user:
+    name: "{{ user_to_add }}"
+    state: present
+    groups: sudo
+    append: yes
+
+- name: Copy ssh public key
+  ansible.posix.authorized_key:
+    user: "{{ user_to_add }}"
+    key: "{{ lookup('file', ssh_key_path) }}"
+    state: present

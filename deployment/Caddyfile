@@ -1,0 +1,14 @@
+paste.nichir.in {
+    basicauth / {
+        tyagdit {$CADDY_BASICAUTH_PASS}
+    }
+    request_body {
+        max_size 100MB
+    }
+    log {
+        output file /var/log/pastefy.log
+        format console
+    }
+    encode zstd gzip
+    reverse_proxy pastefy:80
+}

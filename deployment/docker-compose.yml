@@ -1,0 +1,47 @@
+version: "3.8"
+
+services:
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 30
+
+  caddy:
+    image: caddy:alpine
+    restart: unless-stopped
+    env_file:
+      - caddy.env
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - $PWD/Caddyfile:/etc/caddy/Caddyfile
+      - /var/log/caddy/:/var/log/
+      - caddy_data:/data
+      - caddy_config:/config
+
+  pastefy_db:
+    image: mariadb:latest
+    profiles:
+      - pastefy
+    volumes:
+      - pastefy_db_vol:/var/lib/mysql
+    env_file:
+      - caddy.env
+
+  pastefy:
+    depends_on:
+      - pastefy_db
+    image: interaapps/pastefy:latest
+    profiles:
+      - pastefy
+    env_file:
+      - caddy.env
+
+
+volumes:
+  caddy_data:
+    external: true
+  caddy_config:
+  pastefy_db_vol:

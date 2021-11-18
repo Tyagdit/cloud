@@ -1,0 +1,19 @@
+---
+- name: Basic system setup
+  hosts: all
+  remote_user: root
+  ignore_unreachable: yes
+  vars_files:
+    - ['vars/vars.yml', 'vars/default.yml']  # Order is important for overriding
+  roles:
+    - {role: system, tags: ['init']}
+
+
+- name: Docker setup
+  hosts: all
+  remote_user: "{{ run_as_user }}"
+  become: true
+  vars_files:
+    - ['vars/vars.yml', 'vars/default.yml']  # Order is important for overriding
+  roles:
+    - {role: docker, tags: ['docker']}

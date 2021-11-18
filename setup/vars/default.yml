@@ -1,0 +1,6 @@
+---
+# Basic setup vars
+# user_to_add: <user>
+# ssh_key_path: <ssh key path>
+
+# run_as_user: <user>
