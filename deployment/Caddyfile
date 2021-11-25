@@ -2,10 +2,44 @@ paste.nichir.in {
     request_body {
         max_size 100MB
     }
+
     log {
         output file /var/log/pastefy.log
         format console
     }
+
     encode zstd gzip
     reverse_proxy pastefy:80
 }
+
+drop.nichir.in {
+
+    header Expires "Thu, 01 Jan 1970 00:00:01 GMT"
+    header Cache-Control "no-cache"
+
+    file_server /* {
+        root /usr/share/caddy/html/snapdrop
+        index index.html index.htm
+    }
+
+    reverse_proxy /server/* snapdrop:3000
+    # {
+    #     header_up X-Forwarded-For {host}
+    # }
+
+    log {
+        output file /var/log/snapdrop.log
+        format console
+    }
+
+    handle_errors {
+        rewrite * /{http.error.status_code}
+        reverse_proxy https://http.cat {
+            header_up Host http.cat
+        }
+    }
+
+    encode zstd gzip
+}
+
+# vim: set backupcopy=yes:

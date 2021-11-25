@@ -1,0 +1,6 @@
+[submodule "deployment/userbot/snapdrop"]
+	path = deployment/userbot/snapdrop
+	url = https://github.com/RobinLinus/snapdrop.git
+[submodule "deployment/snapdrop"]
+	path = deployment/snapdrop
+	url = https://github.com/RobinLinus/snapdrop.git

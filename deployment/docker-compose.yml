@@ -9,6 +9,7 @@ services:
 
   caddy:
     image: caddy:alpine
+    container_name: caddy_server
     restart: unless-stopped
     env_file:
       - caddy.env
@@ -16,10 +17,14 @@ services:
       - "80:80"
       - "443:443"
     volumes:
+        # caddy
       - $PWD/Caddyfile:/etc/caddy/Caddyfile
-      - /var/log/caddy/:/var/log/
       - caddy_data:/data
       - caddy_config:/config
+        # logging
+      - /var/log/caddy/:/var/log/
+        # snapdrop
+      - $PWD/snapdrop/client/:/usr/share/caddy/html/snapdrop/
 
   pastefy_db:
     image: mariadb:latest
@@ -38,6 +43,14 @@ services:
       - pastefy
     env_file:
       - caddy.env
+
+  snapdrop:
+    image: "node:lts-alpine"
+    user: "node"
+    working_dir: /home/node/app
+    volumes:
+      - ./snapdrop/server/:/home/node/app
+    command: ash -c "npm i && node index.js"
 
 
 volumes:
